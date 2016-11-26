@@ -1,0 +1,257 @@
+
+ <!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <script src="weatherController.js"></script>
+    </head>
+    
+    <style>
+    
+        .btn-xl {
+            padding: 10px 20px;
+            font-size: 20px;
+            border-radius: 10px;
+        }
+    
+    
+    
+    </style>
+    
+    
+    
+<body>
+
+<div ng-app="myApp">
+
+
+<div ng-controller="weatherController">
+
+      <form class="featurette left-labels" ng-submit="form1.$valid && getWeatherReport();" name="form1">
+             
+            <br/><br/><br/>
+            <div class="row">
+            
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                    <label for="cityname">Enter your location:</label>
+                </div>
+                
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                    <input type="text" id="cityname" name="cityname" placeholder="City Name"  ng-model="cityname" class="form-control" required/> <br>
+                    
+                    <span class="help-inline left" style="color:red" ng-show="form1.submitted&&form1.cityname.$error.required ||  form1.cityname.$touched && form1.cityname.$error.required ||  form1.cityname.$dirty && form.cityname.$error.required">City name is required</span>
+                    
+                    
+                </div>
+                
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                    
+                        <button type="submit" name="Submit" class="btn btn-primary " ng-click="form1.submitted=true" ng-disabled="disabledfield1">Submit</button>
+                        <!--<button type="submit" name="Submit" class="btn btn-primary form-control" ng-click="form1.submitted=true" ng-disabled="disabledfield1">Submit</button> -->
+                
+                </div>
+                
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <!--<label for="cityname">Enter your location:</label> -->
+                </div>
+                
+                
+            </div>
+            
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+            
+            
+        </div>
+        
+        <!--<br/> -->
+        <br/>
+           </form>
+        
+        
+        
+         <form class="featurette left-labels" ng-submit="form2.$valid && getWeatherReportFromLocal();" name="form2">
+        
+       
+        <div class="row">
+            
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                    <label for="recentSearches">Your Recent Searches</label>
+                </div>
+                
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                     <select name="recentSearches" class="w-100"  ng-model="recentSearches" 
+                               ng-options="option.name for option in data.availableCities track by option.id"         required ng-disabled="disabledfield"  >
+                                                                <option value="">-- Recent Searches --</option>
+                                                            </select>
+                                                        <span class="error help-inline left" style="color: red;" ng-show="form2.submitted&&form2.recentSearches.$invalid || form2.recentSearches.$touched&&form2.recentSearches.$invalid  || form2.recentSearches.$dirty&&form2.recentSearches.$invalid">
+                                                            Select city
+                                                        </span><!-- Shows error message -->
+                    
+                </div>
+                
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                    
+                        <button type="submit" name="Submit" class="btn btn-primary" ng-click="form2.submitted=true" ng-disabled="disabledfield2">Submit</button>
+                    <!--    <button type="submit" name="Submit" class="btn btn-primary form-control" ng-click="form2.submitted=true" ng-disabled="disabledfield2">Submit</button>-->
+                
+                </div>
+                
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <!--<label for="recentSearches">Recent Searches</label> -->
+                </div>
+                
+                
+                
+            </div>
+            
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+        </div>
+        
+    <!--     <br/>     -->
+        
+         </form>
+        
+        
+    <!--    <br/>    -->
+    
+    
+    
+    <div class="container" ng-if="dataFound">
+        <p>You searched for {{cityname}} from Enter your location</p>            
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Country</th>
+            <th>City</th>
+            <th>Population</th>
+		<th>Co-Ordinates</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+            <td>{{cityresults.country}}</td>
+            <td>{{cityresults.name}}</td>
+            <td>{{cityresults.population}}</td>
+	  <td>
+		<table class="table table-bordered" >
+
+
+		<thead>
+          	<tr>
+            	<th>Longitude</th>
+           	<th>Latitude</th>
+         	</tr>
+       		 </thead>
+
+
+		<tbody>
+            <tr>
+            <td>{{cityresults.coord.lon}}</td>
+            <td>{{cityresults.coord.lat}}</td>
+	</tr>	
+	</tbody>
+
+		</table>
+</td>
+          </tr>
+        </tbody>
+      </table>
+            
+ 
+  
+  </div>    
+  
+  
+  <div class="container" ng-if="dataNotFound">
+        <p>Data not found for</p>            
+    
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="container" ng-if="recentSearch">
+        <p>You searched for {{recentSearches}} {{recentSearches.name}} from recent Searches</p>            
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>R.Country</th>
+            <th>R.City</th>
+            <th>R.Population</th>
+		<th>Co-Ordinates</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+            <td>{{recentCityResults.country}}</td>
+            <td>{{recentCityResults.name}}</td>
+            <td>{{recentCityResults.population}}</td>
+	  <td>
+		<table class="table table-bordered" >
+
+
+		<thead>
+          	<tr>
+            	<th>R.Longitude</th>
+           	<th>R.Latitude</th>
+         	</tr>
+       		 </thead>
+
+
+		<tbody>
+            <tr>
+            <td>{{recentCityResults.coord.lon}}</td>
+            <td>{{recentCityResults.coord.lat}}</td>
+	</tr>	
+	</tbody>
+
+		</table>
+</td>
+          </tr>
+        </tbody>
+      </table>
+            
+ 
+  
+  </div>    
+  
+  
+  <div class="container" ng-if="recentSearchNotFound">
+        <p>Data not found for</p>            
+    
+  </div>
+
+
+</div>
+
+</body>
+</html> 
+
+
+
+
+
+
+
+
+
+
